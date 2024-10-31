@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "solicitud_prestamo")
@@ -17,25 +19,31 @@ public class SolicitudPrestamoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
-    private String estado;
-    private Date fecha_de_solicitud;
-    private Date fecha_de_respuesta;
+    private Date fechaDeSolicitud;
+
+    @Column(nullable = false)
+    private String estado = "Revisión inicial";
+
+
+    @ElementCollection
+    @CollectionTable(name = "documentos_pendientes", joinColumns = @JoinColumn(name = "solicitud_id"))
+    @Column(name = "documento")
+    private List<String> documentosPendientes; // Lista para almacenar documentos pendientes
 
     @ManyToOne
     @JoinColumn(name = "ejecutivo_id", nullable = false)
-    private EjecutivoEntity ejecutivo; // Relación muchos a uno con EjecutivoEntity
+    private EjecutivoEntity ejecutivo;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
-    private ClienteEntity cliente; // Relación muchos a uno con ClienteEntity
+    private ClienteEntity cliente;
 
     @ManyToOne
     @JoinColumn(name = "documentos_id", nullable = false)
-    private DocumentosEntity documentos; // Relación muchos a uno con DocumentosEntity
+    private DocumentosEntity documentos;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "evaluacion_id", referencedColumnName = "id")
-    private EvaluacionCreditoEntity evaluacion; // Relación uno a uno con EvaluacionCredito
 }
+
+
 
 

@@ -19,13 +19,13 @@ public class DocumentosEntity {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private String comprobante_ingresos;
-    private String certificado_de_avaluo;
-    private String hitorial_crediticio;
-    private String escritura_de_propiedad;
-    private String estado_financiero_del_negocio;
-    private String plan_de_negocio;
-    private String presupuesto_de_la_remodelacion;
+    private String comprobanteIngresos;
+    private String certificadoDeAvaluo;
+    private String hitorialCrediticio;
+    private String escrituraDePropiedad;
+    private String estadoFinancieroDelNegocio;
+    private String planDeNegocio;
+    private String presupuestoDeLaRemodelacion;
 
     @OneToMany(mappedBy = "documentos")
     private List<SolicitudPrestamoEntity> solicitudes; // Relación uno a muchos con SolicitudPrestamo
