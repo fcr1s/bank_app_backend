@@ -19,7 +19,6 @@ public class PrestamoEntity {
     @Column(unique = true, nullable = false)
     private Long id;
     private String tipoPrestamo;
-    private Date fechaDeInicio;
     private int plazo;
     private int numeroDeCuotas;
     private double montoDelPrestamo;
@@ -31,4 +30,5 @@ public class PrestamoEntity {
     private double comisionPorAdministracion;
     private double costoMensual;
     private double costosTotales;
+    private Long solicitudId;
 }

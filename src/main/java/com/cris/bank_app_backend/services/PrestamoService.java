@@ -2,6 +2,7 @@ package com.cris.bank_app_backend.services;
 
 import com.cris.bank_app_backend.entities.PrestamoEntity;
 import com.cris.bank_app_backend.repositories.PrestamoRepository;
+import com.cris.bank_app_backend.entities.SolicitudEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,21 @@ public class PrestamoService {
     // Método para obtener todos los préstamos
     public List<PrestamoEntity> obtenerTodosLosPrestamos() {
         return prestamoRepository.findAll();
+    }
+
+    // Método para obtener un préstamo por ID
+    public PrestamoEntity obtenerPrestamoPorId(Long id) {
+        return prestamoRepository.findById(id).orElse(null);
+    }
+
+    // Método para encontrar un préstamo por el ID de la solicitud
+    public PrestamoEntity obtenerPrestamoPorSolicitudId(Long solicitudId) {
+        return prestamoRepository.findBySolicitudId(solicitudId);
+    }
+
+    // Método para eliminar un préstamo por ID
+    public void eliminarPrestamo(Long id) {
+        prestamoRepository.deleteById(id);
     }
 
     // Método para calcular la cuota mensual de un préstamo
@@ -57,6 +73,37 @@ public class PrestamoService {
             default:
                 throw new IllegalArgumentException("Tipo de préstamo no válido");
         }
+    }
+
+    // Método para calcular costos del préstamo
+    public void calcularPrestamo(SolicitudEntity solicitud) {
+        double cuotaMensual = calcularCuotaMensual( solicitud.getMontoDelPrestamo(),
+                solicitud.getPlazo(),
+                solicitud.getTasaDeInteresAnual());
+
+        double seguroDeDesgravamen = (0.03 / 100) * solicitud.getMontoDelPrestamo(); // 0.03% del monto del préstamo por mes
+        double seguroDeIncendio = 20000; // Costo fijo
+        double comisionPorAdministracion = (0.001) * solicitud.getMontoDelPrestamo(); // 1% del monto del préstamo
+
+        double costoMensual = cuotaMensual + seguroDeDesgravamen + seguroDeIncendio;
+        double costosTotales = (costoMensual * (solicitud.getPlazo() * 12)) + solicitud.getMontoDelPrestamo();
+
+        PrestamoEntity prestamo = new PrestamoEntity();
+        prestamo.setTipoPrestamo(solicitud.getTipoPrestamo());
+        prestamo.setPlazo(solicitud.getPlazo());
+        prestamo.setNumeroDeCuotas(solicitud.getPlazo() * 12); // Asumiendo que el plazo está en años
+        prestamo.setMontoDelPrestamo(solicitud.getMontoDelPrestamo());
+        prestamo.setTasaDeInteresAnual(solicitud.getTasaDeInteresAnual());
+        prestamo.setCuotaMensual(cuotaMensual);
+        prestamo.setSeguroDeDesgravamen(seguroDeDesgravamen);
+        prestamo.setSeguroDeIncendio(seguroDeIncendio);
+        prestamo.setComisionPorAdministracion(comisionPorAdministracion);
+        prestamo.setCostoMensual(costoMensual);
+        prestamo.setCostosTotales(costosTotales);
+        prestamo.setSolicitudId(solicitud.getId());
+
+        prestamoRepository.save(prestamo);
+
     }
 
 }

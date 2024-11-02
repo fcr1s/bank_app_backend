@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,9 +27,17 @@ public class SolicitudEntity {
     private int plazo;
     private double montoDelPrestamo;
     private double tasaDeInteresAnual;
-    private Long clienteId; // Almacena el ID del cliente
-    private Long prestamoId; // Almacena el ID del préstamo
+    private String capacidadAhorro;  // "sólida", "moderada" o "insuficiente"
+    private Long clienteId;
+
+
+    // Nuevo campo para almacenar razones de rechazo
+    @ElementCollection
+    private List<String> razonesRechazo = new ArrayList<>();
+
 }
+
+
 
 
 

@@ -55,8 +55,7 @@ public class ClienteController {
             @RequestParam double valorPropiedad,
             @RequestParam double montoPrestamo,
             @RequestParam int plazo,
-            @RequestParam double tasaInteresAnual) { // No necesitas el header aquí si manejamos el estado de sesión en el servicio
-
+            @RequestParam double tasaInteresAnual) {
         try {
             double cuotaMensual = clienteService.simularCredito(tipoPrestamo, valorPropiedad, montoPrestamo, plazo, tasaInteresAnual);
             return ResponseEntity.ok(cuotaMensual);

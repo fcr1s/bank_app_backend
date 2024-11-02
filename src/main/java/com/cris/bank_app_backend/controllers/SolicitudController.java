@@ -21,7 +21,7 @@ public class SolicitudController {
     private SolicitudService solicitudService;
 
     // Endpoint para obtener todas las solicitudes
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<SolicitudEntity>> obtenerSolicitudes() {
         return ResponseEntity.ok(solicitudService.obtenerSolicitudes());
     }
@@ -31,6 +31,17 @@ public class SolicitudController {
     public ResponseEntity<SolicitudEntity> obtenerSolicitud(@PathVariable Long id) {
         SolicitudEntity solicitud = solicitudService.obtenerSolicitudPorId(id);
         return solicitud != null ? ResponseEntity.ok(solicitud) : ResponseEntity.notFound().build();
+    }
+
+    // Endpoint para eliminar una solicitud por ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarSolicitud(@PathVariable Long id) {
+        try {
+            solicitudService.eliminarSolicitud(id);
+            return ResponseEntity.ok("Solicitud eliminada correctamente.");
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Endpoint para crear una nueva solicitud de préstamo

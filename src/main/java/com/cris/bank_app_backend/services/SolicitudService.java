@@ -37,6 +37,11 @@ public class SolicitudService {
         return solicitudRepository.findById(id).orElse(null);
     }
 
+    // Método para eliminar una solicitud por ID
+    public void eliminarSolicitud(Long id) {
+        solicitudRepository.deleteById(id);
+    }
+
     public void crearSolicitud(String tipoPrestamo, double valorPropiedad ,double montoPrestamo, double tasaInteresAnual, int plazo, List<DocumentoEntity> documentos) {
 
         // Obtener el cliente logueado
@@ -101,6 +106,15 @@ public class SolicitudService {
         solicitud.setEstado("Cancelada por el cliente");
         solicitudRepository.save(solicitud);
     }
+
+    // Método para actualizar el estado de una solicitud
+    public void actualizarEstadoSolicitud(Long solicitudId, String nuevoEstado) {
+        SolicitudEntity solicitud = solicitudRepository.findById(solicitudId)
+                .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada para el ID: " + solicitudId));
+        solicitud.setEstado(nuevoEstado);
+        solicitudRepository.save(solicitud);
+    }
+
 }
 
 
