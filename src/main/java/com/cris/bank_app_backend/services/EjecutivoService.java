@@ -1,6 +1,5 @@
 package com.cris.bank_app_backend.services;
 
-import com.cris.bank_app_backend.entities.ClienteEntity;
 import com.cris.bank_app_backend.entities.EjecutivoEntity;
 import com.cris.bank_app_backend.entities.SolicitudEntity;
 import com.cris.bank_app_backend.repositories.EjecutivoRepository;
