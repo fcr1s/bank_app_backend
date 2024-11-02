@@ -20,6 +20,7 @@ public class DocumentoEntity {
     private String rutCliente;
     private String tipoDeDocumento;
     private String ruta;
+    private Long solicitudId;
 }
 
 

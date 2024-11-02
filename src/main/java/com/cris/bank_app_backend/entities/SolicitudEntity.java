@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "solicitud_prestamo")
@@ -26,8 +27,6 @@ public class SolicitudEntity {
     private double tasaDeInteresAnual;
     private Long clienteId; // Almacena el ID del cliente
     private Long prestamoId; // Almacena el ID del préstamo
-    private Long documentosId; // Almacena el ID de los documentos
-    private Long ejecutivoId; // Almacena el ID del ejecutivo
 }
 
 

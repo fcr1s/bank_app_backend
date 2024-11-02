@@ -6,6 +6,8 @@ import com.cris.bank_app_backend.repositories.SolicitudRepository;
 import com.cris.bank_app_backend.entities.DocumentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.NoSuchElementException;
+
 
 import java.util.Date;
 import java.util.List;
@@ -61,8 +63,45 @@ public class SolicitudService {
 
         // Guardar la solicitud
         solicitudRepository.save(solicitud);
+
+        // Guardar los documentos
+        for(DocumentoEntity documento : documentos) {
+            documento.setSolicitudId(solicitud.getId());
+            documento.setRutCliente(clienteLogueado.getRut());
+            documentoService.guardarDocumento(documento);
+        }
     }
 
+    public List<SolicitudEntity> obtenerSolicitudesDelCliente() {
+        // Obtener el cliente logueado
+        ClienteEntity clienteLogueado = clienteService.obtenerClienteLogueado();
+        // Consultar solicitudes del cliente
+        return solicitudRepository.findByClienteId(clienteLogueado.getId());
+    }
 
+    public void cancelarSolicitud(Long solicitudId, String rutCliente) {
+        // Buscar la solicitud por ID y verificar que pertenece al cliente indicado
+        SolicitudEntity solicitud = solicitudRepository.findById(solicitudId)
+                .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada para el ID: " + solicitudId));
+
+        // Verificar que la solicitud pertenece al cliente que intenta cancelarla
+        if (!solicitud.getRut().equals(rutCliente)) {
+            throw new IllegalArgumentException("La solicitud no pertenece al cliente indicado.");
+        }
+
+        // Verificar si el estado de la solicitud permite la cancelación
+        if (!solicitud.getEstado().equals("En revisión inicial") &&
+                !solicitud.getEstado().equals("Pendiente de documentación") &&
+                !solicitud.getEstado().equals("En evaluación") &&
+                !solicitud.getEstado().equals("Pre-aprobada")) {
+            throw new IllegalArgumentException("La solicitud no puede ser cancelada en su estado actual.");
+        }
+
+        // Actualizar el estado de la solicitud a "Cancelada por el cliente"
+        solicitud.setEstado("Cancelada por el cliente");
+        solicitudRepository.save(solicitud);
+    }
 }
+
+
 

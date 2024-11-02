@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/solicitudes")
@@ -47,6 +48,32 @@ public class SolicitudController {
             return ResponseEntity.ok("Solicitud de préstamo creada en revisión inicial.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    // Endpoint para consultar todas las solicitudes de un cliente
+    @GetMapping("/mis-solicitudes")
+    public ResponseEntity<List<SolicitudEntity>> obtenerSolicitudesDelCliente() {
+        try {
+            List<SolicitudEntity> solicitudes = solicitudService.obtenerSolicitudesDelCliente();
+            return ResponseEntity.ok(solicitudes);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    // Endpoint para cancelar una solicitud de préstamo
+    @PutMapping("/cancelar")
+    public ResponseEntity<String> cancelarSolicitud(
+            @RequestParam Long solicitudId,
+            @RequestParam String rutCliente) {
+        try {
+            solicitudService.cancelarSolicitud(solicitudId, rutCliente);
+            return ResponseEntity.ok("Solicitud cancelada exitosamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
