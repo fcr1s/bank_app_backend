@@ -1,12 +1,38 @@
 package com.cris.bank_app_backend.services;
 
+import com.cris.bank_app_backend.entities.PrestamoEntity;
+import com.cris.bank_app_backend.repositories.PrestamoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class SimulacionCreditoService {
+import java.util.List;
 
-    public double calcularCuotaMensual(String tipoPrestamo, double valorPropiedad, double montoPrestamo, int plazo, double tasaInteresAnual) {
-        // Verificación de restricciones según el tipo de préstamo
+@Service
+public class PrestamoService {
+
+    @Autowired
+    private PrestamoRepository prestamoRepository;
+
+    // Método para guardar un nuevo préstamo
+    public PrestamoEntity guardarPrestamo(PrestamoEntity prestamo) {
+        return prestamoRepository.save(prestamo);
+    }
+
+    // Método para obtener todos los préstamos
+    public List<PrestamoEntity> obtenerTodosLosPrestamos() {
+        return prestamoRepository.findAll();
+    }
+
+    // Método para calcular la cuota mensual de un préstamo
+    public double calcularCuotaMensual(double montoPrestamo, int plazo, double tasaInteresAnual) {
+        double tasaInteresMensual = tasaInteresAnual / 12 / 100;
+        int numeroTotalPagos = plazo * 12;
+        return montoPrestamo * (tasaInteresMensual * Math.pow(1 + tasaInteresMensual, numeroTotalPagos)) /
+                (Math.pow(1 + tasaInteresMensual, numeroTotalPagos) - 1);
+    }
+
+    // Verificación de restricciones según el tipo de préstamo
+    public void verificarRestricciones(String tipoPrestamo, double valorPropiedad, double montoPrestamo, int plazo, double tasaInteresAnual) {
         switch (tipoPrestamo.toLowerCase()) {
             case "primera vivienda":
                 if (plazo > 30 || montoPrestamo > valorPropiedad * 0.8 || tasaInteresAnual < 3.5 || tasaInteresAnual > 5.0) {
@@ -31,11 +57,6 @@ public class SimulacionCreditoService {
             default:
                 throw new IllegalArgumentException("Tipo de préstamo no válido");
         }
-
-        // Cálculo de la cuota mensual
-        double tasaInteresMensual = tasaInteresAnual / 12 / 100;
-        int numeroTotalPagos = plazo * 12;
-        return montoPrestamo * (tasaInteresMensual * Math.pow(1 + tasaInteresMensual, numeroTotalPagos)) /
-                (Math.pow(1 + tasaInteresMensual, numeroTotalPagos) - 1);
     }
+
 }

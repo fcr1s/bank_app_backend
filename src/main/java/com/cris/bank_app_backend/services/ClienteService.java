@@ -9,55 +9,58 @@ import java.util.*;
 
 @Service
 public class ClienteService {
+
     @Autowired
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private SimulacionCreditoService simulacionCreditoService;
+    private PrestamoService prestamoService;
 
-    public ClienteEntity findByRut(String rut) {
-        return clienteRepository.findByRut(rut);
-    }
-
-    public List<ClienteEntity> findAll() {
+    // Método para obtener todos los clientes
+    public List<ClienteEntity> obtenerClientes() {
         return clienteRepository.findAll();
     }
 
-    public ClienteEntity save(ClienteEntity cliente) {
-        if (clienteRepository.findByRut(cliente.getRut()) != null) {
-            throw new IllegalArgumentException("El cliente ya existe");
+    // Variable para almacenar el cliente logueado
+    private static ClienteEntity clienteLogueado;
+
+    // Método para registrar un nuevo cliente
+    public ClienteEntity registrarCliente(ClienteEntity cliente) {
+        // Verificar si ya existe un cliente con el mismo RUT
+        if (clienteRepository.findByRut(cliente.getRut()).isPresent()) {
+            throw new IllegalArgumentException("El RUT ya está registrado");
         }
         return clienteRepository.save(cliente);
     }
 
-    public void deleteById(Long id) {
-        clienteRepository.deleteById(id);
+    // Método para iniciar sesión
+    public ClienteEntity login(String rut, String password) {
+        clienteLogueado = clienteRepository.findByRutAndPassword(rut, password).orElse(null);
+        return clienteLogueado;
     }
 
+    // Método para simular crédito (asegurándose de que el cliente esté logueado)
     public double simularCredito(String tipoPrestamo, double valorPropiedad, double montoPrestamo, int plazo, double tasaInteresAnual) {
-        return simulacionCreditoService.calcularCuotaMensual(tipoPrestamo, valorPropiedad, montoPrestamo, plazo, tasaInteresAnual);
+        if (clienteLogueado == null) {
+            throw new IllegalStateException("El cliente no está logueado.");
+        }
+        // Verificar restricciones del préstamo
+        prestamoService.verificarRestricciones(tipoPrestamo, valorPropiedad, montoPrestamo, plazo, tasaInteresAnual);
+        // Calcular cuota mensual del préstamo
+        return prestamoService.calcularCuotaMensual(montoPrestamo, plazo, tasaInteresAnual);
     }
 
-    public String login(String rut, String password) {
-        ClienteEntity cliente = clienteRepository.findByRut(rut);
-        if (cliente != null && cliente.getPassword().equals(password)) {
-            return UUID.randomUUID().toString(); // Genera un token único y lo retorna
-        }
-        throw new IllegalArgumentException("RUT o contraseña incorrectos");
+    // Método para cerrar sesión
+    public void logout() {
+        clienteLogueado = null; // Limpiar la sesión
     }
 
-    public ClienteEntity updateCliente(String rut, ClienteEntity clienteActualizado) {
-        ClienteEntity clienteExistente = clienteRepository.findByRut(rut);
-        if (clienteExistente == null) {
-            throw new IllegalArgumentException("Cliente no encontrado");
+    // Método para obtener el cliente logueado
+    public ClienteEntity obtenerClienteLogueado() {
+        if (clienteLogueado == null) {
+            throw new IllegalStateException("No hay un cliente logueado.");
         }
-        clienteExistente.setName(clienteActualizado.getName());
-        clienteExistente.setEmail(clienteActualizado.getEmail());
-        clienteExistente.setPhone(clienteActualizado.getPhone());
-        clienteExistente.setAddress(clienteActualizado.getAddress());
-        clienteExistente.setBirthdate(clienteActualizado.getBirthdate());
-
-        return clienteRepository.save(clienteExistente);
+        return clienteLogueado;
     }
 }
 
