@@ -28,7 +28,7 @@ public class PrestamoController {
     }
 
     // Endpoint para obtener todos los préstamos
-    @GetMapping("/todos")
+    @GetMapping("/")
     public ResponseEntity<List<PrestamoEntity>> obtenerTodosLosPrestamos() {
         return ResponseEntity.ok(prestamoService.obtenerTodosLosPrestamos());
     }
