@@ -22,15 +22,22 @@ public class EjecutivoService {
 
     private static EjecutivoEntity ejecutivoLogueado;
 
+    // Método para registrar un nuevo ejecutivo
+    public EjecutivoEntity registrarEjecutivo(EjecutivoEntity ejecutivo) {
+        // Verificar si ya existe un ejecutivo con el mismo RUT
+        if (ejecutivoRepository.findByRut(ejecutivo.getRut()).isPresent()) {
+            throw new IllegalArgumentException("El RUT ya está registrado");
+        }
+        return ejecutivoRepository.save(ejecutivo);
+    }
+
     // Método para iniciar sesión
     public EjecutivoEntity login(String rut, String password) {
         ejecutivoLogueado = ejecutivoRepository.findByRutAndPassword(rut, password).orElse(null);
         return ejecutivoLogueado;
     }
 
-    public void logout() {
-        ejecutivoLogueado = null; // Limpiar la sesión
-    }
+
 
     // Método para obtener el cliente logueado
     public EjecutivoEntity obtenerClienteLogueado() {
@@ -38,11 +45,6 @@ public class EjecutivoService {
             throw new IllegalStateException("No hay un ejecutivo logueado.");
         }
         return ejecutivoLogueado;
-    }
-
-    // Método para verificar si hay un ejecutivo logueado
-    public boolean estaLogueado() {
-        return ejecutivoLogueado != null;
     }
 
     // Método para obtener todas las solicitudes
@@ -70,7 +72,7 @@ public class EjecutivoService {
         // Validar que el nuevo estado sea uno de los permitidos
         List<String> estadosPermitidos = List.of(
                 "En revisión inicial", "Pendiente de documentación", "En evaluación",
-                "Pre-Aprobada", "En aprobación final", "Aprobada", "Rechazada"
+                "Pre-Aprobada", "Aprobada", "Rechazada"
         );
 
         if (!estadosPermitidos.contains(nuevoEstado)) {

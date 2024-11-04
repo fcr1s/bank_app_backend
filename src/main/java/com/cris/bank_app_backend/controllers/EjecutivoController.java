@@ -30,6 +30,17 @@ public class EjecutivoController {
     @Autowired
     private EvaluacionService evaluacionService;
 
+    // Endpoint para registrar un nuevo ejecutivo
+    @PostMapping("/registrarse")
+    public ResponseEntity<EjecutivoEntity> registrarEjecutivo(@RequestBody EjecutivoEntity ejecutivo) {
+        try {
+            EjecutivoEntity nuevoEjecutivo = ejecutivoService.registrarEjecutivo(ejecutivo);
+            return ResponseEntity.ok(nuevoEjecutivo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
     // Endpoint para iniciar sesión del ejecutivo
     @PostMapping("/login")
     public ResponseEntity<EjecutivoEntity> login(@RequestParam String rut, @RequestParam String password) {
@@ -37,21 +48,10 @@ public class EjecutivoController {
         return ejecutivo != null ? ResponseEntity.ok(ejecutivo) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // Endpoint para cerrar sesión del ejecutivo
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        ejecutivoService.logout();
-        return ResponseEntity.ok("Sesión cerrada");
-    }
-
     // Endpoint para que el ejecutivo consulte todas las solicitudes o filtre por estado
     @GetMapping("/solicitudes")
     public ResponseEntity<List<SolicitudEntity>> obtenerSolicitudes(
             @RequestParam(required = false) String estado) {
-        if (!ejecutivoService.estaLogueado()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-
         List<SolicitudEntity> solicitudes;
         if (estado != null && !estado.isEmpty()) {
             solicitudes = ejecutivoService.obtenerSolicitudesPorEstado(estado);
@@ -65,9 +65,6 @@ public class EjecutivoController {
     @PutMapping("/solicitudes/{id}/estado")
     public ResponseEntity<String> actualizarEstadoSolicitud(
             @PathVariable Long id, @RequestParam String nuevoEstado) {
-        if (!ejecutivoService.estaLogueado()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
         try {
             ejecutivoService.actualizarEstadoSolicitud(id, nuevoEstado);
             return ResponseEntity.ok("Estado actualizado exitosamente.");

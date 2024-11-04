@@ -21,7 +21,6 @@ public class SolicitudEntity {
     @Column(unique = true, nullable = false)
     private Long id;
     private String rut;
-    private Date fechaDeSolicitud;
     private String estado;
     private String tipoPrestamo;
     private int plazo;

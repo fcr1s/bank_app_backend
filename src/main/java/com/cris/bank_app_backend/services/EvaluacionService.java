@@ -104,7 +104,7 @@ public class EvaluacionService {
 
         // Actualizar solicitud según el resultado de la evaluación
         if (razonesRechazo.isEmpty()) {
-            solicitud.setEstado("Pre-aprobada");
+            solicitud.setEstado("Pre-Aprobada");
             prestamoService.calcularPrestamo(solicitud);
         } else {
             solicitud.setEstado("Rechazada");

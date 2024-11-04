@@ -20,8 +20,8 @@ public class ClienteEntity {
     private Long id;
     private String rut;
     private String name;
-    private Date birthdate;
     private String password;
+    private String email;
 }
 
 

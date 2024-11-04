@@ -50,11 +50,6 @@ public class ClienteService {
         return prestamoService.calcularCuotaMensual(montoPrestamo, plazo, tasaInteresAnual);
     }
 
-    // Método para cerrar sesión
-    public void logout() {
-        clienteLogueado = null; // Limpiar la sesión
-    }
-
     // Método para obtener el cliente logueado
     public ClienteEntity obtenerClienteLogueado() {
         if (clienteLogueado == null) {

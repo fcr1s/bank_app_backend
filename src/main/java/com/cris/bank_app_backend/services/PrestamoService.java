@@ -94,6 +94,7 @@ public class PrestamoService {
         prestamo.setNumeroDeCuotas(solicitud.getPlazo() * 12); // Asumiendo que el plazo está en años
         prestamo.setMontoDelPrestamo(solicitud.getMontoDelPrestamo());
         prestamo.setTasaDeInteresAnual(solicitud.getTasaDeInteresAnual());
+        prestamo.setTasaDeInteresMensual(solicitud.getTasaDeInteresAnual() / 12 / 100);
         prestamo.setCuotaMensual(cuotaMensual);
         prestamo.setSeguroDeDesgravamen(seguroDeDesgravamen);
         prestamo.setSeguroDeIncendio(seguroDeIncendio);

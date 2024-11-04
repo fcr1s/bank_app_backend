@@ -18,7 +18,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    // Endpoint para obtener todos los clientes
+    // Endpoint para obtener todos los clientes en formato JSON
     @GetMapping("/")
     public ResponseEntity<List<ClienteEntity>> obtenerClientes() {
         return ResponseEntity.ok(clienteService.obtenerClientes());
@@ -35,20 +35,15 @@ public class ClienteController {
         }
     }
 
-    // Endpoint para iniciar sesión
+    // Endpoint para iniciar sesión, retorna el cliente si las credenciales son correctas
     @PostMapping("/login")
     public ResponseEntity<ClienteEntity> login(@RequestParam String rut, @RequestParam String password) {
         ClienteEntity cliente = clienteService.login(rut, password);
         return cliente != null ? ResponseEntity.ok(cliente) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // Endpoint para cerrar sesión
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        clienteService.logout();
-        return ResponseEntity.ok("Sesión cerrada");
-    }
 
+    // Endpoint para simular un crédito
     @PostMapping("/simular-credito")
     public ResponseEntity<Double> simularCredito(
             @RequestParam String tipoPrestamo,

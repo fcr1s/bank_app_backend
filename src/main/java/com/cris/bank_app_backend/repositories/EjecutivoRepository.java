@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface EjecutivoRepository extends JpaRepository<EjecutivoEntity, Long> {
     Optional<EjecutivoEntity> findByRutAndPassword(String rut, String password);
+    Optional<EjecutivoEntity> findByRut(String rut);
 }
 

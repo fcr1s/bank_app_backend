@@ -17,10 +17,10 @@ public class DocumentoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
-    private String rutCliente;
-    private String tipoDeDocumento;
-    private String ruta;
-    private Long solicitudId;
+    @Lob
+    private byte[] documento;          // El documento en sí (como un arreglo de bytes)
+    private Long solicitudId;          // ID de la solicitud asociada
 }
+
 
 

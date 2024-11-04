@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -44,7 +45,6 @@ public class SolicitudController {
         }
     }
 
-    // Endpoint para crear una nueva solicitud de préstamo
     @PostMapping("/crear")
     public ResponseEntity<String> crearSolicitud(
             @RequestParam String tipoPrestamo,
@@ -52,9 +52,10 @@ public class SolicitudController {
             @RequestParam double montoPrestamo,
             @RequestParam double tasaInteresAnual,
             @RequestParam int plazo,
-            @RequestBody List<DocumentoEntity> documentos) {
+            @RequestParam List<MultipartFile> documentos) { // Cambiado a List<MultipartFile>
 
         try {
+            // Llama al servicio para crear la solicitud, pasando los documentos como archivos
             solicitudService.crearSolicitud(tipoPrestamo, valorPropiedad, montoPrestamo, tasaInteresAnual, plazo, documentos);
             return ResponseEntity.ok("Solicitud de préstamo creada en revisión inicial.");
         } catch (IllegalArgumentException e) {
@@ -76,10 +77,9 @@ public class SolicitudController {
     // Endpoint para cancelar una solicitud de préstamo
     @PutMapping("/cancelar")
     public ResponseEntity<String> cancelarSolicitud(
-            @RequestParam Long solicitudId,
-            @RequestParam String rutCliente) {
+            @RequestParam Long solicitudId) {
         try {
-            solicitudService.cancelarSolicitud(solicitudId, rutCliente);
+            solicitudService.cancelarSolicitud(solicitudId);
             return ResponseEntity.ok("Solicitud cancelada exitosamente.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

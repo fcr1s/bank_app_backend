@@ -6,6 +6,9 @@ import com.cris.bank_app_backend.repositories.SolicitudRepository;
 import com.cris.bank_app_backend.entities.DocumentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 
@@ -42,7 +45,9 @@ public class SolicitudService {
         solicitudRepository.deleteById(id);
     }
 
-    public void crearSolicitud(String tipoPrestamo, double valorPropiedad ,double montoPrestamo, double tasaInteresAnual, int plazo, List<DocumentoEntity> documentos) {
+    public void crearSolicitud(String tipoPrestamo, double valorPropiedad,
+                               double montoPrestamo, double tasaInteresAnual, int plazo,
+                               List<MultipartFile> documentos) {
 
         // Obtener el cliente logueado
         ClienteEntity clienteLogueado = clienteService.obtenerClienteLogueado();
@@ -50,15 +55,9 @@ public class SolicitudService {
         // Verificar restricciones del préstamo
         prestamoService.verificarRestricciones(tipoPrestamo, valorPropiedad, montoPrestamo, plazo, tasaInteresAnual);
 
-        // Validar documentos según el tipo de préstamo
-        if (!documentoService.validarDocumentos(tipoPrestamo, documentos)) {
-            throw new IllegalArgumentException("Documentos requeridos faltantes o incorrectos para el tipo de préstamo.");
-        }
-
         // Crear la solicitud
         SolicitudEntity solicitud = new SolicitudEntity();
         solicitud.setRut(clienteLogueado.getRut());
-        solicitud.setFechaDeSolicitud(new Date());
         solicitud.setEstado("En revisión inicial");
         solicitud.setTipoPrestamo(tipoPrestamo);
         solicitud.setMontoDelPrestamo(montoPrestamo);
@@ -70,12 +69,21 @@ public class SolicitudService {
         solicitudRepository.save(solicitud);
 
         // Guardar los documentos
-        for(DocumentoEntity documento : documentos) {
+        for (MultipartFile file : documentos) {
+            // Crear un nuevo DocumentoEntity para cada archivo
+            DocumentoEntity documento = new DocumentoEntity();
             documento.setSolicitudId(solicitud.getId());
-            documento.setRutCliente(clienteLogueado.getRut());
-            documentoService.guardarDocumento(documento);
+
+            // Guardar el archivo en la base de datos
+            try {
+                documento.setDocumento(file.getBytes());
+                documentoService.saveDocument(documento); // Asegúrate de que este método existe en DocumentoService
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Error al guardar el documento: " + e.getMessage());
+            }
         }
     }
+
 
     public List<SolicitudEntity> obtenerSolicitudesDelCliente() {
         // Obtener el cliente logueado
@@ -84,16 +92,10 @@ public class SolicitudService {
         return solicitudRepository.findByClienteId(clienteLogueado.getId());
     }
 
-    public void cancelarSolicitud(Long solicitudId, String rutCliente) {
+    public void cancelarSolicitud(Long solicitudId) {
         // Buscar la solicitud por ID y verificar que pertenece al cliente indicado
         SolicitudEntity solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada para el ID: " + solicitudId));
-
-        // Verificar que la solicitud pertenece al cliente que intenta cancelarla
-        if (!solicitud.getRut().equals(rutCliente)) {
-            throw new IllegalArgumentException("La solicitud no pertenece al cliente indicado.");
-        }
-
         // Verificar si el estado de la solicitud permite la cancelación
         if (!solicitud.getEstado().equals("En revisión inicial") &&
                 !solicitud.getEstado().equals("Pendiente de documentación") &&

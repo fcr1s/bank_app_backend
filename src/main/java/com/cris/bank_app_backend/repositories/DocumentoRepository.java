@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DocumentoRepository extends JpaRepository<DocumentoEntity, Long> {
-    List<DocumentoEntity> findByRutCliente(String rutCliente);
     List<DocumentoEntity> findBySolicitudId(Long solicitudId);
 }
 
