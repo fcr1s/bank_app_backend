@@ -32,7 +32,7 @@ pipeline {
         stage('Push Backend Docker Image to Docker Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')]) {
+                    withCredentials([string(credentialsId: 'dhpsw', variable: 'dhpsw')]) {
                         bat 'docker login -u fcr1s -p %dhpsw%'
                     }
                     bat 'docker push fcr1s/bank_app_backend:latest'
