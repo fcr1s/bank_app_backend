@@ -33,8 +33,8 @@ pipeline {
             steps {
                 script {
                     // Aquí hacemos referencia al ID de las credenciales que creaste
-                    withCredentials([usernamePassword(credentialsId: 'dhpsw', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        bat "docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%"
+                    withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')])
+                    bat 'docker login -u fcr1s -p %dhpsw'
                     }
                     bat 'docker push fcr1s/bank_app_backend:latest'
                 }
