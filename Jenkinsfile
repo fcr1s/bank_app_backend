@@ -3,10 +3,7 @@ pipeline {
     tools {
         maven 'maven_3_9_8' // Usar la versión de Maven 3.9.8
     }
-    environment {
-        DOCKER_CREDENTIALS_ID = 'dockerHubCredentials' // ID de las credenciales en Jenkins para Docker Hub
-        DOCKER_USER = 'fcr1s' // Tu usuario de Docker Hub
-    }
+
     stages {
         stage('Checkout Backend') {
             steps {
@@ -35,8 +32,8 @@ pipeline {
         stage('Push Backend Docker Image to Docker Hub') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: DOCKER_CREDENTIALS_ID, variable: 'DOCKER_PASSWORD')]) {
-                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASSWORD%'
+                    withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')]) {
+                        bat 'docker login -u fcr1s -p %dhpsw%'
                     }
                     bat 'docker push fcr1s/bank_app_backend:latest'
                 }
