@@ -19,7 +19,9 @@ pipeline {
 
         stage('Unit Tests Backend') {
             steps {
-                bat 'mvn test'
+                dir('bank_app_backend/src/test/java/com/cris/bank_app_backend/services ') {
+                    bat 'mvn test'
+                }
             }
         }
 
