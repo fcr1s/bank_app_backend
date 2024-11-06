@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 
 @RestController
@@ -23,7 +23,7 @@ public class DocumentoController {
     @PostMapping("/guardar")
     public ResponseEntity<String> guardarDocumento(
             @RequestParam Long solicitudId,
-            @RequestParam("documento") MultipartFile archivo) {
+            @RequestParam("documento") MultipartFile archivo) { // "documento" no es nece
 
         try {
             DocumentoEntity documento = new DocumentoEntity();

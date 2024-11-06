@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import com.cris.bank_app_backend.entities.DocumentoEntity;
 import com.cris.bank_app_backend.repositories.DocumentoRepository;
-import com.cris.bank_app_backend.services.DocumentoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -116,9 +115,7 @@ public class DocumentoServiceTest {
         // Configurar el mock para lanzar IOException
         when(archivo.getBytes()).thenThrow(new IOException("Error al leer el archivo"));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            documentoService.guardarDocumento(archivo, documento);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> documentoService.guardarDocumento(archivo, documento));
 
         assertEquals("Error al guardar el documento: Error al leer el archivo", exception.getMessage());
         verify(documentoRepository, never()).save(documento);

@@ -32,7 +32,6 @@ public class SolicitudEntity {
     // Nuevo campo para almacenar razones de rechazo
     @ElementCollection
     private List<String> razonesRechazo = new ArrayList<>();
-
 }
 
 

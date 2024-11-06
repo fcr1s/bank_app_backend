@@ -8,7 +8,6 @@ import com.cris.bank_app_backend.entities.EjecutivoEntity;
 import com.cris.bank_app_backend.entities.SolicitudEntity;
 import com.cris.bank_app_backend.repositories.EjecutivoRepository;
 import com.cris.bank_app_backend.repositories.SolicitudRepository;
-import com.cris.bank_app_backend.services.EjecutivoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -115,7 +114,7 @@ public class EjecutivoServiceTest {
     public void obtenerSolicitudesPorEstado_ValidEstado_ShouldReturnSolicitudes() {
         String estado = "En revisión inicial";
         SolicitudEntity solicitud = new SolicitudEntity();
-        List<SolicitudEntity> solicitudes = Arrays.asList(solicitud);
+        List<SolicitudEntity> solicitudes = List.of(solicitud);
 
         given(solicitudRepository.findByEstado(estado)).willReturn(solicitudes);
 

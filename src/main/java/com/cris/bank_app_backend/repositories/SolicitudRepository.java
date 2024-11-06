@@ -12,7 +12,5 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
 
 
     List<SolicitudEntity> findByClienteId(Long clienteId);
-    List<SolicitudEntity> findByRut(String rut);
-    List<SolicitudEntity> findByEstadoIn(List<String> estados);
     List<SolicitudEntity> findByEstado(String estado);
 }

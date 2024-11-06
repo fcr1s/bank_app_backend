@@ -3,7 +3,6 @@ package com.cris.bank_app_backend.controllers;
 
 import com.cris.bank_app_backend.entities.SolicitudEntity;
 import com.cris.bank_app_backend.services.SolicitudService;
-import com.cris.bank_app_backend.entities.DocumentoEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

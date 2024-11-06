@@ -97,7 +97,7 @@ public class SolicitudServiceTest {
         MultipartFile file = mock(MultipartFile.class);
         when(file.getBytes()).thenReturn(new byte[]{1, 2, 3});
 
-        solicitudService.crearSolicitud("primera vivienda", 500000, 200000, 4.5, 15, Arrays.asList(file));
+        solicitudService.crearSolicitud("primera vivienda", 500000, 200000, 4.5, 15, List.of(file));
 
         verify(prestamoService, times(1)).verificarRestricciones("primera vivienda", 500000, 200000, 15, 4.5);
         verify(solicitudRepository, times(1)).save(any(SolicitudEntity.class));
@@ -115,7 +115,7 @@ public class SolicitudServiceTest {
         when(file.getBytes()).thenThrow(new IOException("Error al leer archivo"));
 
         assertThrows(IllegalArgumentException.class, () ->
-                solicitudService.crearSolicitud("primera vivienda", 500000, 200000, 4.5, 15, Arrays.asList(file))
+                solicitudService.crearSolicitud("primera vivienda", 500000, 200000, 4.5, 15, List.of(file))
         );
 
         verify(prestamoService, times(1)).verificarRestricciones("primera vivienda", 500000, 200000, 15, 4.5);
@@ -131,12 +131,12 @@ public class SolicitudServiceTest {
 
         SolicitudEntity solicitud = new SolicitudEntity();
         solicitud.setClienteId(1L);
-        when(solicitudRepository.findByClienteId(1L)).thenReturn(Arrays.asList(solicitud));
+        when(solicitudRepository.findByClienteId(1L)).thenReturn(List.of(solicitud));
 
         List<SolicitudEntity> result = solicitudService.obtenerSolicitudesDelCliente();
 
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getClienteId());
+        assertEquals(1L, result.getFirst().getClienteId());
         verify(solicitudRepository, times(1)).findByClienteId(1L);
     }
 

@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
+import java.util.List;
 
 public class EvaluacionServiceTest {
 
@@ -32,7 +32,7 @@ public class EvaluacionServiceTest {
 
     @Test
     public void evaluarSolicitud_WhenAllConditionsMet_ShouldReturnTrueAndSetPreApproved() {
-        // Arrange
+
         SolicitudEntity solicitud = new SolicitudEntity();
         solicitud.setMontoDelPrestamo(100000);
         solicitud.setPlazo(12);
@@ -40,46 +40,47 @@ public class EvaluacionServiceTest {
 
         double ingresosMensuales = 300000;
         boolean buenHistorialCrediticio = true;
-        int antiguedadLaboral = 3; // 3 years
+        int antiguedadLaboral = 3;
         double totalDeudas = 50000;
-        double valorPropiedad = 150000;
-        int edadCliente = 30; // 30 years old
+
+        int edadCliente = 30;
         double saldoCuenta = 20000;
         boolean saldoConsistente = true;
         double totalDepositos = 40000;
-        int antiguedadCuenta = 3; // 3 years
-        double porcentajeRetiroReciente = 20; // 20%
+        int antiguedadCuenta = 3;
+        double porcentajeRetiroReciente = 20;
 
         // Mock del cálculo de cuota mensual
         double cuotaMensual = 8575; // Expected monthly payment
         given(prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual()))
                 .willReturn(cuotaMensual);
 
-        // Act
+
         boolean resultado = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio,
-                antiguedadLaboral, totalDeudas, valorPropiedad, edadCliente,
+                antiguedadLaboral, totalDeudas, edadCliente,
                 saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
 
-        // Assert
+
         assertTrue(resultado);
         assertEquals("Pre-Aprobada", solicitud.getEstado());
-        assertNull(solicitud.getRazonesRechazo());
+
+        assertTrue(solicitud.getRazonesRechazo().isEmpty());
         verify(solicitudPrestamoRepository, times(1)).save(solicitud);
     }
 
     @Test
     public void evaluarSolicitud_WhenDebtToIncomeRatioTooHigh_ShouldReturnFalseAndSetRejected() {
-        // Arrange
+
         SolicitudEntity solicitud = new SolicitudEntity();
         solicitud.setMontoDelPrestamo(100000);
         solicitud.setPlazo(12);
         solicitud.setTasaDeInteresAnual(5.0);
 
-        double ingresosMensuales = 100000; // Monthly income too low
+        double ingresosMensuales = 100000;
         boolean buenHistorialCrediticio = true;
-        int antiguedadLaboral = 3; // 3 years
-        double totalDeudas = 70000; // High debts
-        double valorPropiedad = 150000;
+        int antiguedadLaboral = 3;
+        double totalDeudas = 70000;
+
         int edadCliente = 30;
         double saldoCuenta = 20000;
         boolean saldoConsistente = true;
@@ -87,21 +88,128 @@ public class EvaluacionServiceTest {
         int antiguedadCuenta = 3;
         double porcentajeRetiroReciente = 20;
 
-        double cuotaMensual = 8575; // Expected monthly payment
+        double cuotaMensual = 8575;
         given(prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual()))
                 .willReturn(cuotaMensual);
 
         // Act
         boolean resultado = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio,
-                antiguedadLaboral, totalDeudas, valorPropiedad, edadCliente,
+                antiguedadLaboral, totalDeudas, edadCliente,
                 saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
 
         // Assert
         assertFalse(resultado);
         assertEquals("Rechazada", solicitud.getEstado());
-        assertEquals(Arrays.asList("La relación deuda/ingreso supera el 50%"), solicitud.getRazonesRechazo());
+        assertEquals(List.of("La relación deuda/ingreso supera el 50%"), solicitud.getRazonesRechazo());
         verify(solicitudPrestamoRepository, times(1)).save(solicitud);
     }
 
+    @Test
+    public void evaluarSolicitud_WhenClientAgeExceedsLimit_ShouldReturnFalseAndSetRejected() {
+        // Arrange
+        SolicitudEntity solicitud = new SolicitudEntity();
+        solicitud.setMontoDelPrestamo(100000);
+        solicitud.setPlazo(40);
+        solicitud.setTasaDeInteresAnual(5.0);
+
+        double ingresosMensuales = 300000;
+        boolean buenHistorialCrediticio = true;
+        int antiguedadLaboral = 5;
+        double totalDeudas = 50000;
+        int edadCliente = 40;
+        double saldoCuenta = 50000;
+        boolean saldoConsistente = true;
+        double totalDepositos = 40000;
+        int antiguedadCuenta = 5;
+        double porcentajeRetiroReciente = 10;
+
+        // Simular el cálculo de cuota mensual
+        double cuotaMensual = 2684.11;
+        given(prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual()))
+                .willReturn(cuotaMensual);
+
+
+        boolean resultado = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio,
+                antiguedadLaboral, totalDeudas, edadCliente,
+                saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
+
+
+        assertFalse(resultado);
+        assertEquals("Rechazada", solicitud.getEstado());
+        assertEquals(List.of("La edad del cliente al finalizar el préstamo superará los 75 años"), solicitud.getRazonesRechazo());
+        verify(solicitudPrestamoRepository, times(1)).save(solicitud);
+    }
+
+    @Test
+    public void evaluarSolicitud_WhenSavingsCapacityIsInsufficient_ShouldReturnFalseAndSetRejected() {
+
+        SolicitudEntity solicitud = new SolicitudEntity();
+        solicitud.setMontoDelPrestamo(100000);
+        solicitud.setPlazo(10);
+        solicitud.setTasaDeInteresAnual(5.0);
+
+        double ingresosMensuales = 300000;
+        boolean buenHistorialCrediticio = true;
+        int antiguedadLaboral = 5;
+        double totalDeudas = 50000;
+        int edadCliente = 35;
+        double saldoCuenta = 5000;
+        boolean saldoConsistente = false;
+        double totalDepositos = 10000;
+        int antiguedadCuenta = 1;
+        double porcentajeRetiroReciente = 40;
+
+
+        double cuotaMensual = 1200;
+        given(prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual()))
+                .willReturn(cuotaMensual);
+
+
+        boolean resultado = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio,
+                antiguedadLaboral, totalDeudas, edadCliente,
+                saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
+
+
+        assertFalse(resultado);
+        assertEquals("Rechazada", solicitud.getEstado());
+        assertTrue(solicitud.getRazonesRechazo().contains("Capacidad de ahorro insuficiente"));
+        verify(solicitudPrestamoRepository, times(1)).save(solicitud);
+    }
+
+
+
+    @Test
+    public void evaluarSolicitud_WhenAgeTooHighAtEndOfLoan_ShouldReturnFalseAndSetRejected() {
+
+        SolicitudEntity solicitud = new SolicitudEntity();
+        solicitud.setMontoDelPrestamo(100000);
+        solicitud.setPlazo(12);
+        solicitud.setTasaDeInteresAnual(5.0);
+
+        double ingresosMensuales = 300000;
+        boolean buenHistorialCrediticio = true;
+        int antiguedadLaboral = 5;
+        double totalDeudas = 50000;
+        int edadCliente = 70;
+        double saldoCuenta = 20000;
+        boolean saldoConsistente = true;
+        double totalDepositos = 40000;
+        int antiguedadCuenta = 3;
+        double porcentajeRetiroReciente = 20;
+
+        double cuotaMensual = 8575;
+        given(prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual()))
+                .willReturn(cuotaMensual);
+
+        boolean resultado = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio,
+                antiguedadLaboral, totalDeudas, edadCliente,
+                saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
+
+
+        assertFalse(resultado);
+        assertEquals("Rechazada", solicitud.getEstado());
+        assertEquals(List.of("La edad del cliente al finalizar el préstamo superará los 75 años"), solicitud.getRazonesRechazo());
+        verify(solicitudPrestamoRepository, times(1)).save(solicitud);
+    }
 
 }

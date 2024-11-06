@@ -77,13 +77,13 @@ public class EjecutivoController {
 
     @PutMapping("/evaluar-solicitud/{solicitudId}")
     public ResponseEntity<String> evaluarSolicitud(@PathVariable Long solicitudId, @RequestParam double ingresosMensuales,@RequestParam boolean buenHistorialCrediticio, @RequestParam int antiguedadLaboral,
-                                                   @RequestParam double totalDeudas, @RequestParam double valorPropiedad, @RequestParam int edadCliente,
+                                                   @RequestParam double totalDeudas, @RequestParam int edadCliente,
                                                    @RequestParam double saldoCuenta, @RequestParam boolean saldoConsistente, @RequestParam double totalDepositos,
                                                    @RequestParam int antiguedadCuenta, @RequestParam double porcentajeRetiroReciente) {
         Optional<SolicitudEntity> solicitudOpt = solicitudRepository.findById(solicitudId);
         if (solicitudOpt.isPresent()) {
             SolicitudEntity solicitud = solicitudOpt.get();
-            boolean esAprobada = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio, antiguedadLaboral, totalDeudas, valorPropiedad, edadCliente,
+            boolean esAprobada = evaluacionService.evaluarSolicitud(solicitud, ingresosMensuales, buenHistorialCrediticio, antiguedadLaboral, totalDeudas, edadCliente,
                     saldoCuenta, saldoConsistente, totalDepositos, antiguedadCuenta, porcentajeRetiroReciente);
 
             if (esAprobada) {

@@ -18,7 +18,7 @@ public class EvaluacionService {
     @Autowired
     private PrestamoService prestamoService;
 
-    public boolean evaluarSolicitud(SolicitudEntity solicitud, double ingresosMensuales, boolean buenHistorialCrediticio, int antiguedadLaboral, double totalDeudas, double valorPropiedad, int edadCliente,
+    public boolean evaluarSolicitud(SolicitudEntity solicitud, double ingresosMensuales, boolean buenHistorialCrediticio, int antiguedadLaboral, double totalDeudas, int edadCliente,
                                     double saldoCuenta, boolean saldoConsistente, double totalDepositos, int antiguedadCuenta, double porcentajeRetiroReciente) {
         List<String> razonesRechazo = new ArrayList<>();
         int reglasCapacidadAhorroCumplidas = 0;

@@ -6,8 +6,6 @@ import static org.mockito.Mockito.*;
 
 import com.cris.bank_app_backend.entities.ClienteEntity;
 import com.cris.bank_app_backend.repositories.ClienteRepository;
-import com.cris.bank_app_backend.services.ClienteService;
-import com.cris.bank_app_backend.services.PrestamoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
