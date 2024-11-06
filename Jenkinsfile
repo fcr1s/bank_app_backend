@@ -1,13 +1,13 @@
 pipeline {
     agent any
     tools {
-        maven 'maven_3_9_8' // Usar la versión de Maven 3.9.8
+        maven 'maven_3_9_8'
     }
 
     stages {
         stage('Checkout Backend') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fcr1s/bank_app_backend']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/fcr1s/bank_app_backend']])
             }
         }
 
