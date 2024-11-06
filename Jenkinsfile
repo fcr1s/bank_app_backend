@@ -35,7 +35,7 @@ pipeline {
                     // Aquí hacemos referencia al ID de las credenciales que creaste
                     withCredentials([string(credentialsId: 'dhpswid', variable: 'dhpsw')])
                     bat 'docker login -u fcr1s -p %dhpsw'
-                    }
+                    
                     bat 'docker push fcr1s/bank_app_backend:latest'
                 }
             }
