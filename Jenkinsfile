@@ -32,8 +32,9 @@ pipeline {
         stage('Push Backend Docker Image to Docker Hub') {
             steps {
                 script {
-                    // Aquí hacemos referencia al ID de las credenciales que creaste
-                    withDockerRegistry(credentialsId: 'dhpswid')
+                    withCredentials([string(credentialsId: 'docker_hub_token', variable: 'DOCKER_TOKEN')]) {
+                        bat 'docker login -u fcr1s -p %DOCKER_TOKEN%'
+                    }
                     bat 'docker push fcr1s/bank_app_backend:latest'
                 }
             }
