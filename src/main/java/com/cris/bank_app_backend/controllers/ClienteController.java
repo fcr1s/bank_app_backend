@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
-@CrossOrigin
+@CrossOrigin("*")
 public class ClienteController {
 
     @Autowired
@@ -42,12 +42,6 @@ public class ClienteController {
         return cliente != null ? ResponseEntity.ok(cliente) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    // Endpoint para logout
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        clienteService.logout();
-        return ResponseEntity.ok("Sesión cerrada");
-    }
 
     // Endpoint para simular un crédito
     @PostMapping("/simular-credito")

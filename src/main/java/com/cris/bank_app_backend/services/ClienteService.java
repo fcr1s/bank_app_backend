@@ -39,11 +39,6 @@ public class ClienteService {
         return clienteLogueado;
     }
 
-    // Método para cerrar sesión
-    public void logout() {
-        clienteLogueado = null;
-    }
-
     // Método para simular crédito (asegurándose de que el cliente esté logueado)
     public double simularCredito(String tipoPrestamo, double valorPropiedad, double montoPrestamo, int plazo, double tasaInteresAnual) {
         if (clienteLogueado == null) {

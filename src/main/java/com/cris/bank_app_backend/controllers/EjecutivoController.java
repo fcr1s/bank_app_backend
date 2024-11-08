@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ejecutivos")
-@CrossOrigin
+@CrossOrigin("*")
 public class EjecutivoController {
 
     @Autowired

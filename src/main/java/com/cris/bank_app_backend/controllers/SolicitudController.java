@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/solicitudes")
-@CrossOrigin
+@CrossOrigin("*")
 public class SolicitudController {
 
     @Autowired
