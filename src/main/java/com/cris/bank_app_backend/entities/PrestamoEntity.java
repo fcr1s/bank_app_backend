@@ -21,14 +21,14 @@ public class PrestamoEntity {
     private String tipoPrestamo;
     private int plazo;
     private int numeroDeCuotas;
-    private double montoDelPrestamo;
+    private int montoDelPrestamo;
     private double tasaDeInteresAnual;
     private double tasaDeInteresMensual;
-    private double cuotaMensual;
-    private double seguroDeDesgravamen;
-    private double seguroDeIncendio;
-    private double comisionPorAdministracion;
-    private double costoMensual;
-    private double costosTotales;
+    private int cuotaMensual;
+    private int seguroDeDesgravamen;
+    private int seguroDeIncendio;
+    private int comisionPorAdministracion;
+    private int costoMensual;
+    private int costosTotales;
     private Long solicitudId;
 }

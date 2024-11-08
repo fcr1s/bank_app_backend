@@ -92,15 +92,15 @@ public class PrestamoService {
         prestamo.setTipoPrestamo(solicitud.getTipoPrestamo());
         prestamo.setPlazo(solicitud.getPlazo());
         prestamo.setNumeroDeCuotas(solicitud.getPlazo() * 12); // Asumiendo que el plazo está en años
-        prestamo.setMontoDelPrestamo(solicitud.getMontoDelPrestamo());
+        prestamo.setMontoDelPrestamo((int) solicitud.getMontoDelPrestamo());
         prestamo.setTasaDeInteresAnual(solicitud.getTasaDeInteresAnual());
         prestamo.setTasaDeInteresMensual(solicitud.getTasaDeInteresAnual() / 12 / 100);
-        prestamo.setCuotaMensual(cuotaMensual);
-        prestamo.setSeguroDeDesgravamen(seguroDeDesgravamen);
-        prestamo.setSeguroDeIncendio(seguroDeIncendio);
-        prestamo.setComisionPorAdministracion(comisionPorAdministracion);
-        prestamo.setCostoMensual(costoMensual);
-        prestamo.setCostosTotales(costosTotales);
+        prestamo.setCuotaMensual((int) cuotaMensual);
+        prestamo.setSeguroDeDesgravamen((int)seguroDeDesgravamen);
+        prestamo.setSeguroDeIncendio((int)seguroDeIncendio);
+        prestamo.setComisionPorAdministracion((int)comisionPorAdministracion);
+        prestamo.setCostoMensual((int)costoMensual);
+        prestamo.setCostosTotales((int)costosTotales);
         prestamo.setSolicitudId(solicitud.getId());
 
         prestamoRepository.save(prestamo);

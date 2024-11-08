@@ -25,6 +25,7 @@ public class EvaluacionService {
 
         // Calcular cuota mensual del préstamo
         double cuotaMensual = prestamoService.calcularCuotaMensual(solicitud.getMontoDelPrestamo(), solicitud.getPlazo(), solicitud.getTasaDeInteresAnual());
+
         // R1: Relación Cuota/Ingreso
         double relacionCuotaIngreso = (cuotaMensual / ingresosMensuales) * 100;
         if (relacionCuotaIngreso > 35) {
