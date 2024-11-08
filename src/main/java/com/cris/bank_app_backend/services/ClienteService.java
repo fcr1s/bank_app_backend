@@ -47,7 +47,7 @@ public class ClienteService {
         // Verificar restricciones del préstamo
         prestamoService.verificarRestricciones(tipoPrestamo, valorPropiedad, montoPrestamo, plazo, tasaInteresAnual);
         // Calcular cuota mensual del préstamo
-        return (int)prestamoService.calcularCuotaMensual(montoPrestamo, plazo, tasaInteresAnual);
+        return prestamoService.calcularCuotaMensual(montoPrestamo, plazo, tasaInteresAnual);
     }
 
     // Método para obtener el cliente logueado
