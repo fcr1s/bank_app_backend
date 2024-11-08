@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/documentos")
-@CrossOrigin(origins = "http://4.228.227.122:8080")
+@CrossOrigin("*")
 public class DocumentoController {
 
     @Autowired
