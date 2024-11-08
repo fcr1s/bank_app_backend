@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/solicitudes")
-@CrossOrigin("*")
+@CrossOrigin("http://4.228.227.122:8080")
 public class SolicitudController {
 
     @Autowired
