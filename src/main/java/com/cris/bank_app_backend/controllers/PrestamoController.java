@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prestamos")
-@CrossOrigin("http://4.228.227.122:8080")
 public class PrestamoController {
 
     @Autowired
