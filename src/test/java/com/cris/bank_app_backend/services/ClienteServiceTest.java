@@ -55,6 +55,7 @@ public class ClienteServiceTest {
         verify(clienteRepository, times(1)).findAll();
     }
 
+
     // Prueba para registrar un nuevo cliente (caso exitoso)
     @Test
     public void registrarCliente_ShouldRegisterNewCliente() {
@@ -100,7 +101,25 @@ public class ClienteServiceTest {
         verify(clienteRepository, times(1)).findByRutAndPassword(rut, password);
     }
 
-    // Prueba para iniciar sesión con credenciales incorrectas
+    // Prueba para cerrar sesión
+    @Test
+    public void logout_ShouldSetLoggedInClienteToNull() {
+        // Simular un cliente logueado
+        ClienteEntity cliente = new ClienteEntity(1L, "12345678-9", "Cliente Uno", "password",  "c@mail");
+        given(clienteRepository.findByRutAndPassword(cliente.getRut(), cliente.getPassword())).willReturn(Optional.of(cliente));
+        ClienteEntity logeado = clienteService.login(cliente.getRut(), cliente.getPassword());
+        assertNotNull(logeado);
+        // Cerrar sesión
+        clienteService.logout();
+
+        // Verificar que clienteLogueado sea null
+        assertThrows(IllegalStateException.class, () -> clienteService.obtenerClienteLogueado());
+    }
+
+
+
+
+        // Prueba para iniciar sesión con credenciales incorrectas
     @Test
     public void login_WithInvalidCredentials_ShouldReturnNull() {
         String rut = "12345678-9";
