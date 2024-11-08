@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/ejecutivos")
+@CrossOrigin(origins = "http://4.228.227.122:8080")
 public class EjecutivoController {
 
     @Autowired

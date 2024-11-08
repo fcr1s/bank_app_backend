@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Lizst;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = "http://4.228.227.122:8080")
 public class ClienteController {
 
     @Autowired

@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prestamos")
+@CrossOrigin(origins = "http://4.228.227.122:8080")
 public class PrestamoController {
 
     @Autowired
