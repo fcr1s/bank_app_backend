@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prestamos")
-@CrossOrigin("*")
+@CrossOrigin
 public class PrestamoController {
 
     @Autowired
