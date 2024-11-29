@@ -28,17 +28,17 @@ public class SolicitudService {
     @Autowired
     private PrestamoService prestamoService;
 
-    // Método para obtener todas las solicitudes
+    // Metodo para obtener todas las solicitudes
     public List<SolicitudEntity> obtenerSolicitudes() {
         return solicitudRepository.findAll();
     }
 
-    // Método para obtener una solicitud por ID
+    // Metodo para obtener una solicitud por ID
     public SolicitudEntity obtenerSolicitudPorId(Long id) {
         return solicitudRepository.findById(id).orElse(null);
     }
 
-    // Método para eliminar una solicitud por ID
+    // Metodo para eliminar una solicitud por ID
     public void eliminarSolicitud(Long id) {
         solicitudRepository.deleteById(id);
     }
@@ -75,7 +75,7 @@ public class SolicitudService {
             // Guardar el archivo en la base de datos
             try {
                 documento.setDocumento(file.getBytes());
-                documentoService.saveDocument(documento); // Asegúrate de que este método existe en DocumentoService
+                documentoService.saveDocument(documento);
             } catch (IOException e) {
                 throw new IllegalArgumentException("Error al guardar el documento: " + e.getMessage());
             }
@@ -107,7 +107,7 @@ public class SolicitudService {
         solicitudRepository.save(solicitud);
     }
 
-    // Método para actualizar el estado de una solicitud
+    // Metodo para actualizar el estado de una solicitud
     public void actualizarEstadoSolicitud(Long solicitudId, String nuevoEstado) {
         SolicitudEntity solicitud = solicitudRepository.findById(solicitudId)
                 .orElseThrow(() -> new NoSuchElementException("Solicitud no encontrada para el ID: " + solicitudId));

@@ -14,27 +14,27 @@ public class PrestamoService {
     @Autowired
     private PrestamoRepository prestamoRepository;
 
-    // Método para guardar un nuevo préstamo
+    // Metodo para guardar un nuevo préstamo
     public PrestamoEntity guardarPrestamo(PrestamoEntity prestamo) {
         return prestamoRepository.save(prestamo);
     }
 
-    // Método para obtener todos los préstamos
+    // Metodo para obtener todos los préstamos
     public List<PrestamoEntity> obtenerTodosLosPrestamos() {
         return prestamoRepository.findAll();
     }
 
-    // Método para obtener un préstamo por ID
+    // Metodo para obtener un préstamo por ID
     public PrestamoEntity obtenerPrestamoPorId(Long id) {
         return prestamoRepository.findById(id).orElse(null);
     }
 
-    // Método para encontrar un préstamo por el ID de la solicitud
+    // Metodo para encontrar un préstamo por el ID de la solicitud
     public PrestamoEntity obtenerPrestamoPorSolicitudId(Long solicitudId) {
         return prestamoRepository.findBySolicitudId(solicitudId);
     }
 
-    // Método para eliminar un préstamo por ID
+    // Mtodo para eliminar un préstamo por ID
     public void eliminarPrestamo(Long id) {
         prestamoRepository.deleteById(id);
     }
@@ -75,7 +75,7 @@ public class PrestamoService {
         }
     }
 
-    // Método para calcular costos del préstamo
+    // Metodo para calcular costos del préstamo
     public void calcularPrestamo(SolicitudEntity solicitud) {
         double cuotaMensual = calcularCuotaMensual( solicitud.getMontoDelPrestamo(),
                 solicitud.getPlazo(),

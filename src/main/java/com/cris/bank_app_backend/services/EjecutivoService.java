@@ -22,7 +22,7 @@ public class EjecutivoService {
 
     private static EjecutivoEntity ejecutivoLogueado;
 
-    // Método para registrar un nuevo ejecutivo
+    // Metodo para registrar un nuevo ejecutivo
     public EjecutivoEntity registrarEjecutivo(EjecutivoEntity ejecutivo) {
         // Verificar si ya existe un ejecutivo con el mismo RUT
         if (ejecutivoRepository.findByRut(ejecutivo.getRut()).isPresent()) {
@@ -31,7 +31,7 @@ public class EjecutivoService {
         return ejecutivoRepository.save(ejecutivo);
     }
 
-    // Método para iniciar sesión
+    // Metodo para iniciar sesión
     public EjecutivoEntity login(String rut, String password) {
         ejecutivoLogueado = ejecutivoRepository.findByRutAndPassword(rut, password).orElse(null);
         return ejecutivoLogueado;
@@ -39,7 +39,7 @@ public class EjecutivoService {
 
 
 
-    // Método para obtener el cliente logueado
+    // Metodo para obtener el cliente logueado
     public EjecutivoEntity obtenerClienteLogueado() {
         if (ejecutivoLogueado == null) {
             throw new IllegalStateException("No hay un ejecutivo logueado.");
@@ -47,12 +47,12 @@ public class EjecutivoService {
         return ejecutivoLogueado;
     }
 
-    // Método para obtener todas las solicitudes
+    // Metodo para obtener todas las solicitudes
     public List<SolicitudEntity> obtenerTodasLasSolicitudes() {
         return solicitudRepository.findAll();
     }
 
-    // Método para obtener solicitudes por estado
+    // Metodo para obtener solicitudes por estado
     public List<SolicitudEntity> obtenerSolicitudesPorEstado(String estado) {
         // Validamos que el estado sea uno de los permitidos
         List<String> estadosPermitidos = List.of(
@@ -67,7 +67,7 @@ public class EjecutivoService {
         return solicitudRepository.findByEstado(estado);
     }
 
-    // Método para actualizar el estado de una solicitud
+    // Metodo para actualizar el estado de una solicitud
     public void actualizarEstadoSolicitud(Long id, String nuevoEstado) {
         // Validar que el nuevo estado sea uno de los permitidos
         List<String> estadosPermitidos = List.of(

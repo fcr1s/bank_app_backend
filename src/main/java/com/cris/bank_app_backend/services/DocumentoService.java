@@ -16,12 +16,12 @@ public class DocumentoService {
     private DocumentoRepository documentoRepository;
 
 
-    // Método para obtener un documento por ID
+    // Metodo para obtener un documento por ID
     public DocumentoEntity obtenerDocumentoPorId(Long id) {
         return documentoRepository.findById(id).orElse(null);
     }
 
-    // Método para obtener documentos por solicitudId
+    // Metodo para obtener documentos por solicitudId
     public List<DocumentoEntity> obtenerDocumentosPorSolicitudId(Long solicitudId) {
         return documentoRepository.findBySolicitudId(solicitudId);
     }
@@ -30,7 +30,7 @@ public class DocumentoService {
         documentoRepository.save(documento);
     }
 
-    // Método para guardar un documento
+    // Metodo para guardar un documento
     public void guardarDocumento(MultipartFile archivo, DocumentoEntity documento) {
         try {
             // Convierte el archivo a un arreglo de bytes

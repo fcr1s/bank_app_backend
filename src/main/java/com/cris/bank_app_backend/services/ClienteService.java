@@ -16,7 +16,7 @@ public class ClienteService {
     @Autowired
     private PrestamoService prestamoService;
 
-    // Método para obtener todos los clientes
+    // Metodo para obtener todos los clientes
     public List<ClienteEntity> obtenerClientes() {
         return clienteRepository.findAll();
     }
@@ -24,7 +24,7 @@ public class ClienteService {
     // Variable para almacenar el cliente logueado
     private static ClienteEntity clienteLogueado;
 
-    // Método para registrar un nuevo cliente
+    // Metodo para registrar un nuevo cliente
     public ClienteEntity registrarCliente(ClienteEntity cliente) {
         // Verificar si ya existe un cliente con el mismo RUT
         if (clienteRepository.findByRut(cliente.getRut()).isPresent()) {
@@ -33,13 +33,13 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    // Método para iniciar sesión
+    // Metodo para iniciar sesión
     public ClienteEntity login(String rut, String password) {
         clienteLogueado = clienteRepository.findByRutAndPassword(rut, password).orElse(null);
         return clienteLogueado;
     }
 
-    // Método para simular crédito (asegurándose de que el cliente esté logueado)
+    // Metodo para simular crédito (asegurándose de que el cliente esté logueado)
     public double simularCredito(String tipoPrestamo, double valorPropiedad, double montoPrestamo, int plazo, double tasaInteresAnual) {
         if (clienteLogueado == null) {
             throw new IllegalStateException("El cliente no está logueado.");
@@ -50,7 +50,7 @@ public class ClienteService {
         return prestamoService.calcularCuotaMensual(montoPrestamo, plazo, tasaInteresAnual);
     }
 
-    // Método para obtener el cliente logueado
+    // Metodo para obtener el cliente logueado
     public ClienteEntity obtenerClienteLogueado() {
         if (clienteLogueado == null) {
             throw new IllegalStateException("No hay un cliente logueado.");
@@ -58,4 +58,7 @@ public class ClienteService {
         return clienteLogueado;
     }
 }
+
+// metodo para comunicarse con microservicio de prestamos en el puerto 8081
+
 
