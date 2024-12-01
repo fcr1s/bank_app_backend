@@ -52,6 +52,7 @@ public class PrestamoController {
         return ResponseEntity.ok(prestamoService.obtenerPrestamoPorSolicitudId(id));
     }
 
+    //to do: se va a solitidud controller
     @PostMapping("/{id}/respuesta")
     public ResponseEntity<String> responderPrestamo(@PathVariable Long id, @RequestParam boolean aceptar) {
         if (aceptar) {

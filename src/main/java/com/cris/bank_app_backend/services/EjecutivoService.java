@@ -39,7 +39,7 @@ public class EjecutivoService {
 
 
 
-    // Metodo para obtener el cliente logueado
+    // Metodo para obtener el ejecutivo logueado
     public EjecutivoEntity obtenerClienteLogueado() {
         if (ejecutivoLogueado == null) {
             throw new IllegalStateException("No hay un ejecutivo logueado.");
@@ -52,7 +52,7 @@ public class EjecutivoService {
         return solicitudRepository.findAll();
     }
 
-    // Metodo para obtener solicitudes por estado
+        // Metodo para obtener solicitudes por estado
     public List<SolicitudEntity> obtenerSolicitudesPorEstado(String estado) {
         // Validamos que el estado sea uno de los permitidos
         List<String> estadosPermitidos = List.of(

@@ -34,12 +34,12 @@ public class PrestamoService {
         return prestamoRepository.findBySolicitudId(solicitudId);
     }
 
-    // Mtodo para eliminar un préstamo por ID
+    // Metodo para eliminar un préstamo por ID
     public void eliminarPrestamo(Long id) {
         prestamoRepository.deleteById(id);
     }
 
-    // Método para calcular la cuota mensual de un préstamo
+    // Metodo para calcular la cuota mensual de un préstamo
     public double calcularCuotaMensual(double montoPrestamo, int plazo, double tasaInteresAnual) {
         double tasaInteresMensual = tasaInteresAnual / 12 / 100;
         int numeroTotalPagos = plazo * 12;
